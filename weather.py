@@ -5,6 +5,15 @@ from datetime import datetime
 API_TOKEN = 'fbe9d08222fbe4a986f4926ac4c316d0'
 city = 'Rome,it'
 
+def get_coord_by_city_name(name):
+
+    url = f"http://search.maps.sputnik.ru/search/addr?q={name}&addr_limit=1"
+    data = json.loads(get(url).text)
+    coord = data['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates']
+    lat = coord[1]
+    lon = coord[0]
+    return lat, lon
+
 
 def weather_now(city):
 
@@ -23,9 +32,11 @@ def weather_now(city):
     return weather
 
 
-def weather_for_week():
+def weather_for_week(city):
 
-    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={47.9957}&lon={37.7903}&exclude=current,hourly,minutely,alerts&appid={API_TOKEN}&units=metric&lang={'ru'}"
+    lat, lon = get_coord_by_city_name(city)
+    print(lat, lon)
+    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={API_TOKEN}&units=metric&lang={'ru'}"
     data = json.loads(get(url).text)
     week_forecast = []
     for i in range(0, 7):
@@ -43,9 +54,11 @@ def weather_for_week():
     return week_forecast
 
 
-def weather_tomorrow():
+def weather_tomorrow(city):
 
-    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={47.9957}&lon={37.7903}&exclude=current,hourly,minutely,alerts&appid={API_TOKEN}&units=metric&lang={'ru'}"
+    lat, lon = get_coord_by_city_name(city)
+    print(lat, lon)
+    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={API_TOKEN}&units=metric&lang={'ru'}"
     data = json.loads(get(url).text)
     tomorrow_forecast = {
         'temp_day': data['daily'][1]['temp']['day'],
@@ -60,8 +73,6 @@ def weather_tomorrow():
 
 
 if __name__ == '__main__':
-    weather_now(city)
-    weather_for_week()
-    weather_tomorrow()
+    get_coord_by_city_name('Киев')
 
 

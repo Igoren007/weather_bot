@@ -82,8 +82,8 @@ def forecast_now(message):
 def forecast_tomorrow(message):
 
 	try:
-		data = weather.weather_tomorrow()
-		sms = 'В городе (название) завтра ожидается следующая погода:\n\n'
+		data = weather.weather_tomorrow(message.text)
+		sms = f'В городе {message.text} завтра ожидается следующая погода:\n\n'
 		sms_i = f"  --  температура воздуха днем {data['temp_day']} гр,\n" \
 					f"  --  температура воздуха ночью {data['temp_night']} гр,\n" \
 					f"  --  на небе {data['sky']},\n" \
@@ -99,8 +99,8 @@ def forecast_tomorrow(message):
 def forecast_week(message):
 
 	try:
-		data = weather.weather_for_week()
-		sms = 'В городе (название) ожидается следующая погода:\n\n'
+		data = weather.weather_for_week(message.text)
+		sms = f'В городе {message.text} ожидается следующая погода:\n\n'
 		for item in data:
 			sms_i = f"********   {datetime.fromtimestamp(item['date']).strftime('%d-%m-%Y')}   *********\n" \
 					 f"  --  температура воздуха днем {item['temp_day']} гр,\n" \
