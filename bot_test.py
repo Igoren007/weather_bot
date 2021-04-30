@@ -3,9 +3,15 @@ from telebot import types
 import weather
 from datetime import datetime
 
-bot_TOKEN = '1740828596:AAFIcI7A8T8vl_NG65ubxgewFva49BqNz6s'
 
-bot = telebot.TeleBot(bot_TOKEN)
+def get_token():
+
+    with open("bot_token.txt") as f:
+        bot_TOKEN = f.read().strip()
+    return bot_TOKEN
+
+
+bot = telebot.TeleBot(get_token())
 
 
 @bot.message_handler(commands=['start'])

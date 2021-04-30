@@ -1,9 +1,13 @@
 from requests import get
 import json
-from datetime import datetime
 
-API_TOKEN = 'fbe9d08222fbe4a986f4926ac4c316d0'
-city = 'Rome,it'
+
+def get_token():
+
+    with open("api_token.txt") as f:
+        API_TOKEN = f.read().strip()
+    return API_TOKEN
+
 
 def get_coord_by_city_name(name):
 
@@ -17,7 +21,7 @@ def get_coord_by_city_name(name):
 
 def weather_now(city):
 
-    url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}&lang={}'.format(city, API_TOKEN,'ru')
+    url = 'https://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid={}&lang={}'.format(city, get_token(),'ru')
     data = json.loads(get(url).text)
     sky = data['weather'][0]['description']
     temt_now = data['main']['temp']
@@ -36,7 +40,7 @@ def weather_for_week(city):
 
     lat, lon = get_coord_by_city_name(city)
     print(lat, lon)
-    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={API_TOKEN}&units=metric&lang={'ru'}"
+    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={get_token()}&units=metric&lang={'ru'}"
     data = json.loads(get(url).text)
     week_forecast = []
     for i in range(0, 7):
@@ -58,7 +62,7 @@ def weather_tomorrow(city):
 
     lat, lon = get_coord_by_city_name(city)
     print(lat, lon)
-    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={API_TOKEN}&units=metric&lang={'ru'}"
+    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={get_token()}&units=metric&lang={'ru'}"
     data = json.loads(get(url).text)
     tomorrow_forecast = {
         'temp_day': data['daily'][1]['temp']['day'],
