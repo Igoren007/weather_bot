@@ -16,6 +16,7 @@ def get_coord_by_city_name(name):
     coord = data['result']['address'][0]['features'][0]['geometry']['geometries'][0]['coordinates']
     lat = coord[1]
     lon = coord[0]
+    print(name, lat, lon)
     return lat, lon
 
 
@@ -36,10 +37,33 @@ def weather_now(city):
     return weather
 
 
+def weather_today(city):
+
+    lat, lon = get_coord_by_city_name(city)
+    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,minutely,daily&appid={get_token()}&units=metric&lang=ru"
+    data = json.loads(get(url).text)
+    forecast = (data['hourly'][0],
+                data['hourly'][3],
+                data['hourly'][6],
+                data['hourly'][9],
+                data['hourly'][12],
+                data['hourly'][15])
+    daily_forecast = []
+    for data_item in forecast:
+        hourly_forecast = {
+            'date': data_item['dt'],
+            'temp': data_item['temp'],
+            'wind_speed': data_item['wind_speed'],
+            'sky': data_item['weather'][0]['description'],
+            'pressure': data_item['pressure'] * 0.75,
+        }
+        daily_forecast.append(hourly_forecast)
+    return daily_forecast
+
+
 def weather_for_week(city):
 
     lat, lon = get_coord_by_city_name(city)
-    print(lat, lon)
     url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=current,hourly,minutely,alerts&appid={get_token()}&units=metric&lang={'ru'}"
     data = json.loads(get(url).text)
     week_forecast = []
@@ -77,6 +101,7 @@ def weather_tomorrow(city):
 
 
 if __name__ == '__main__':
-    get_coord_by_city_name('Киев')
+    #get_coord_by_city_name('Киев')
+    weather_today('Донецк')
 
 
