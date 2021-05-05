@@ -29,6 +29,8 @@ def send_welcome(message):
 	btn_yes = types.InlineKeyboardButton(text='Давай попробуем ✅', callback_data='yes')
 	btn_no = types.InlineKeyboardButton(text='Не хочу ⛔', callback_data='no')
 	markup.add(btn_yes, btn_no)
+	user_info = f"Пользователь {message.from_user.first_name} {message.from_user.last_name}, {message.from_user.username}"
+	print(user_info)
 	bot.send_message(message.chat.id, 'Привет, я бот, который поможет тебе узнать прогноз погоды в твоем городе. '
 									  'Хочешь попробовать?', reply_markup=markup)
 
