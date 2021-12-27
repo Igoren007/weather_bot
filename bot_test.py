@@ -147,4 +147,11 @@ def forecast_week(message):
 
 
 # bot.polling()
-bot.infinity_polling(True)
+#bot.infinity_polling(True)
+
+while(True):
+	try:
+		bot.polling()
+	except Exception as e:
+		print("Ошибка. Попробуем перезапустить бота.")
+		print(e)
